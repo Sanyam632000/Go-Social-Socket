@@ -1,16 +1,24 @@
 var express = require('express')
-var app = express()
+const http = require('http');
 var cors = require('cors')
+const { Server } = require('socket.io');
+
+var app = express()
 
 app.use(cors())
 
-const io = require("socket.io")(8900, {
-    cors:{
-        origin: "https://go-social-backend.onrender.com",
-        
-    }
-});
+const server = http.createServer(app);
 
+
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "https://go-social.onrender.com" 
+    ],
+    methods: ["GET", "POST"]
+  }
+});
 let users =[];
 
 const addUser =(userId,socketId) =>{
